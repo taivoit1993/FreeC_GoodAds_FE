@@ -1,0 +1,68 @@
+.avatar-upload{
+    display:flex;
+    flex-direction: column;
+    row-gap: 0.5;
+    & > button {
+        margin-top:5px;
+    }
+}
+.upload_label{
+    cursor: pointer;
+    width: 230px;
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+    justify-content: center;
+    background-color: #f0f0f0;
+    border-radius: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+.hidden-input {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+    white-space: nowrap;
+}
+.choose-image{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    pointer-events: none;
+    & > img {
+        width: 100px;
+        height: 100px;
+    }
+    & > p{
+        font-weight: 600;
+    }
+}
+.upload-image{
+    // width: 200px;
+    // height: 200px;
+    & > img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    & > button {
+        position: absolute;
+        right:3px;
+        top: 4px;
+        background-color:white;
+        cursor: pointer;
+        border: 3px;
+        border-radius: 10px;
+        & > .icon-delete{
+            color:rgb(238, 56, 56);
+            font-size: 1.25rem/* 36px */;
+            line-height: 2.5rem/* 40px */;
+        }
+    }
+}

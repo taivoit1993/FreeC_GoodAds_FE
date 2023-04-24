@@ -1,0 +1,48 @@
+.card{
+    &-header{
+        display:flex;
+        flex-direction:column;
+        &--name{
+            font-weight:bold;
+            font-size:20px;
+            margin-bottom: 5px;
+        }
+    }
+    &-title{
+        font-size:25px;
+        font-weight:bold;
+        padding: 10px 0;
+        text-align: center;
+        letter-spacing: 3px;
+    }
+    &-content{
+        display: flex;
+        justify-content: space-between;
+    }
+    &-table{
+        padding: 20px 0;
+        & > table {
+            & > tr {
+                & > th{
+                    width: 250px;
+                }
+                & > td{
+                    width: 250px;
+                }
+            }
+            & > tr:last-child{
+                & > td:first-child{
+                    background-color: #68B984;
+                    text-align: center;
+                    font-weight: bold;
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+    &-footer{
+        display: flex;
+        align-items: center;
+        justify-content:flex-end;
+    }
+}

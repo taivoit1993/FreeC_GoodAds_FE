@@ -1,0 +1,34 @@
+.users-container{
+  &__working{
+    background: #009688;
+    padding: 0.5rem;
+    color: white;
+    font-weight: 600;
+    border-radius: 0.3rem;
+  }
+  &__internship{
+    background: #ff9800;
+    padding: 0.5rem;
+    color: white;
+    font-weight: 600;
+    border-radius: 0.3rem;
+  }
+  &__retired{
+    background: #f44336;
+    padding: 0.5rem;
+    color: white;
+    font-weight: 600;
+    border-radius: 0.3rem;
+  }
+}
+button:disabled{
+  opacity: 50%;
+}
+
+.table-custom{
+  width: 100%;
+  border: 1px solid;
+  td, th{
+    border: 1px solid;
+  }
+}

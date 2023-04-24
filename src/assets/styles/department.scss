@@ -1,0 +1,16 @@
+.department-container{
+  &__active{
+    background: #009688;
+    padding: 0.5rem;
+    color: white;
+    font-weight: 600;
+    border-radius: 0.3rem;
+  }
+  &__inactive{
+    background: #ff9800;
+    padding: 0.5rem;
+    color: white;
+    font-weight: 600;
+    border-radius: 0.3rem;
+  }
+}
