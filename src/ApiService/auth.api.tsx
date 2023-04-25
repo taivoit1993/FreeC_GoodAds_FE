@@ -26,10 +26,24 @@ export const logout = async () => {
     throw new Error("Error");
 }
 
-export const getGoogleUrl = async () => {
-    const response = await axios.get(`${AUTH_URL}auth/google/url`);
-    if (response?.status === 200) {
-        return response.data;
+export const getGoogleUrl = async (queryParams: String) => {
+    if(queryParams.length === 0){
+        const response = await axios.get(`${AUTH_URL}auth/google/url`);
+        if (response?.status === 200) {
+            return response.data;
+        }
+        throw new Error("Error");
     }
-    throw new Error("Error");
+}
+
+export const callbackGoogleUrl = async (queryParams: String) => {
+    if(queryParams.length > 0){
+        const response = await axios.get(`${AUTH_URL}auth/google/oauth2callback`+ queryParams);
+        if (response?.status === 200) {
+            localStorage.setItem("googleAccount", JSON.stringify(response.data.data));
+            setRecoil(authAtom,response.data.data)
+            return response.data;
+        }
+        throw new Error("Error");
+    }
 }

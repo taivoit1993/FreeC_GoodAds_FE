@@ -1,30 +1,42 @@
 import {Button, Checkbox, FormControlLabel, Grid, TextField, Typography} from '@mui/material';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import AlertComponent from '../../components/alert.component';
 import ProcessComponent from '../../components/process.component';
 import {CreateUserValidation} from './validation/login.validation';
 import {useForm} from "react-hook-form";
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useMutation, useQuery} from "react-query";
-import {getGoogleUrl, login} from "../../ApiService/auth.api";
+import {callbackGoogleUrl, getGoogleUrl, login} from "../../ApiService/auth.api";
 import {Helmet} from "react-helmet";
 import React, {useEffect} from "react";
 import {GoogleLogin} from "@react-oauth/google";
 
 const LoginComponent = () => {
+    const location = useLocation();
     const [url, setUrl] = React.useState("");
     let navigate = useNavigate();
     const {register, handleSubmit, formState: {errors}} = useForm({
         resolver: yupResolver(CreateUserValidation)
     });
 
+
+
     const {isLoading} = useQuery({
         queryKey: ["getGoogleUrl"],
-        queryFn: () => getGoogleUrl(),
+        queryFn: () => getGoogleUrl(location.search),
         onSuccess: (data) => {
-            setUrl(data.url);
+            setUrl(data?.url);
         },
     });
+
+    const {} = useQuery({
+        queryKey: ["callbackGoogleUrl"],
+        queryFn: () => callbackGoogleUrl(location.search),
+        onSuccess: (data) => {
+            console.log(data);
+        },
+    });
+
     const {mutate} = useMutation("login", (info: any) => {
             return login(info);
         },

@@ -2,8 +2,19 @@ import React from 'react';
 import AlertComponent from "../../components/alert.component";
 import ProcessComponent from "../../components/process.component";
 import {Button, Typography} from "@mui/material";
+import {useQuery} from "react-query";
+import {callbackGoogleUrl, getGoogleUrl} from "../../ApiService/auth.api";
+import {useLocation} from "react-router-dom";
 
-const LoginCallback = () => {
+const LoginCallback = (props:any) => {
+    const location = useLocation();
+    const {isLoading} = useQuery({
+        queryKey: ["callbackGoogleUrl"],
+        queryFn: () => callbackGoogleUrl(location.search),
+        onSuccess: (data) => {
+            console.log(data);
+        },
+    });
     return (
         <>
             <AlertComponent/>
