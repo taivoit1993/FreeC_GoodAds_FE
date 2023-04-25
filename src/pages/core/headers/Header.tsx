@@ -20,7 +20,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItemCustom from './MenuItem';
 import logo from './../../../assets/images/logodinhgia2.jpg'
 
-const drawerWidth = 260;
+const drawerWidth = 220;
 
 const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})<{
     open?: boolean;
@@ -115,7 +115,7 @@ export default function Header() {
                         <Grid container spacing={2} direction="row"
                               justifyContent="center">
                             <Grid item xs={10}>
-                                <Typography variant="h4" component="h2">Demo Application Intergrate Google Ads API</Typography>
+                                {/*<Typography variant="h4" component="h2">Demo Application Intergrate Google Ads API</Typography>*/}
                             </Grid>
                             <Grid item xs={2}>
                                 <div style={{justifyContent: 'flex-end', display: 'flex'}}>

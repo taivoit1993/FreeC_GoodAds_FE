@@ -15,6 +15,7 @@ import RecoilNexus from 'recoil-nexus';
 import LoginComponent from "./pages/auth/login";
 import {GoogleOAuthProvider} from "@react-oauth/google";
 import LoginCallback from "./pages/auth/login.callback";
+import Campaigns from "./pages/campaign";
 
 const Dashboard = lazy(() => import('./pages/dashboard/dashboard'))
 
@@ -45,6 +46,7 @@ root.render(
                                     <App/>
                                 }>
                                     <Route path="/dashboard" element={<Dashboard/>}/>
+                                    <Route path="/campaigns" element={<Campaigns/>}/>
                                 </Route>
                                 <Route path="/login" element={<LoginComponent/>}/>
                                     <Route path="/login-callback" element={<LoginCallback/>}>
