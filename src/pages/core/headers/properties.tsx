@@ -9,13 +9,14 @@ export const SideBar = [
         hightlight: false
     },
     {
-        url: "ad-group",
+        url: "ad-groups",
         label: "AdGroup",
         icon: <GroupWorkIcon/>,
         hightlight: false
     },
     {
-        label: "ads",
+        url: "ads",
+        label: "Ads",
         icon: <AdsClickIcon/>,
         hightlight: false,
     }

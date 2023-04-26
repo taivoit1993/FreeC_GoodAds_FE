@@ -16,6 +16,9 @@ import LoginComponent from "./pages/auth/login";
 import {GoogleOAuthProvider} from "@react-oauth/google";
 import LoginCallback from "./pages/auth/login.callback";
 import Campaigns from "./pages/campaign";
+import AdGroup from "./pages/adGroup";
+import Ad from "./pages/ad";
+
 
 const Dashboard = lazy(() => import('./pages/dashboard/dashboard'))
 
@@ -47,6 +50,8 @@ root.render(
                                 }>
                                     <Route path="/dashboard" element={<Dashboard/>}/>
                                     <Route path="/campaigns" element={<Campaigns/>}/>
+                                    <Route path="/ad-groups" element={<AdGroup/>}/>
+                                    <Route path="/ads" element={<Ad/>}/>
                                 </Route>
                                 <Route path="/login" element={<LoginComponent/>}/>
                                     <Route path="/login-callback" element={<LoginCallback/>}>

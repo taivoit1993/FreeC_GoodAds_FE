@@ -1,23 +1,26 @@
-import {Card, CardContent, Grid } from '@mui/material';
 import React from 'react';
-import WrapperTableComponent from '../../components/wrapper-table.component';
-import {useQuery} from "react-query";
-import {getCampaign} from "../../ApiService/campaign.api";
-import {campaignColumn} from "./properties/properties";
-import {IColumn} from "../../interfaces/wrapper-table.interface";
+import {Card, CardContent, Grid} from "@mui/material";
 import FilterComponent from "../../components/filter.component";
-import CreateCampaign from "./create";
+import WrapperTableComponent from "../../components/wrapper-table.component";
+import {useQuery} from "react-query";
+import {getAdGroups} from "../../ApiService/adGroup.api";
+import {IColumn} from "../../interfaces/wrapper-table.interface";
+import {addGroupColumn} from "./properties/properties";
 
-const columns: IColumn[] = campaignColumn;
-const Campaigns = () => {
-    document.title = "Google Ads Campaign Manager";
-    const [campaigns, setCampaigns] = React.useState([]);
-    const [campaign, setCampaign] = React.useState(null as any);
+const columns: IColumn[] = addGroupColumn;
+const AdGroup = () => {
+    document.title = "Google Ad Group Manager";
+    const [adGroups, setAdGroups] = React.useState([]);
+    const [adGroup, setAdGroup] = React.useState(null as any);
     const [open, setOpen] = React.useState(false);
     const [idDelete, setIdDelete] = React.useState(0);
     const [idView, setIdView] = React.useState(null as (number | null));
     const [isEdit, setIsEdit] = React.useState(false);
     const [isConfirmDelete, setConfirmDelete] = React.useState(false);
+    const handleSearch = (name: string) => {
+
+    }
+
     const handleChangePage = (newPage: number) => {
         // setPage(newPage);
     }
@@ -31,34 +34,21 @@ const Campaigns = () => {
 
     }
 
-    const handleSearch = (name: string) => {
-
-    }
-
-    const openCreateDialog = () => {
-        setCampaign(null);
-        setOpen(true);
-        setIsEdit(false);
-    }
-
     const openConfirmDelete = (id: number) => {
 
     }
 
-    const onCreate = (data: any) => {
-        if (isEdit) {
-            // update(data);
-        } else {
-            // mutate(data);
-        }
+    const openCreateDialog = () => {
+        setAdGroup(null);
+        setOpen(true);
+        setIsEdit(false);
     }
 
-    //API get list campaign
     const { isLoading, refetch } = useQuery({
-        queryKey: ["getCampaign"],
-        queryFn: () => getCampaign({ params: { } }),
+        queryKey: ["getAdGroups"],
+        queryFn: () => getAdGroups({ params: { } }),
         onSuccess: (data) => {
-            setCampaigns(data.data);
+            setAdGroups(data.data);
         },
     });
     return (
@@ -77,7 +67,7 @@ const Campaigns = () => {
                         <CardContent>
                             <WrapperTableComponent
                                 columns={columns}
-                                rows={campaigns}
+                                rows={adGroups}
                                 loading={isLoading}
                                 meta={null}
                                 onChangePage={handleChangePage}
@@ -89,16 +79,16 @@ const Campaigns = () => {
                     </Card>
                 </Grid>
             </Grid>
-            {open && (
-                <CreateCampaign
-                    open={open}
-                    onclose={() => setOpen(false)}
-                    onCreate={onCreate}
-                    loading={isLoading}
-                    data={campaign}
-                    isEdit={isEdit}
-                />
-            )}
+            {/*{open && (*/}
+            {/*    <CreateCampaign*/}
+            {/*        open={open}*/}
+            {/*        onclose={() => setOpen(false)}*/}
+            {/*        onCreate={onCreate}*/}
+            {/*        loading={isLoading}*/}
+            {/*        data={campaign}*/}
+            {/*        isEdit={isEdit}*/}
+            {/*    />*/}
+            {/*)}*/}
 
 
             {/*<ConfirmDialogComponent*/}
@@ -111,4 +101,4 @@ const Campaigns = () => {
     );
 };
 
-export default Campaigns;
+export default AdGroup;
