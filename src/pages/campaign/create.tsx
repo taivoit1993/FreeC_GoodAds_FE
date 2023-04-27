@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-    Button, Card, CardContent, CardHeader,
+    Button, Card, CardContent, CardHeader, Checkbox,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    FormControl,
+    FormControl, FormControlLabel,
     FormGroup, FormHelperText, InputLabel, MenuItem, Select,
     Stack,
     TextField
@@ -19,6 +19,18 @@ import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 
 const CreateCampaign = (props: any) => {
+    const [setting, setSetting] = React.useState({
+        target_google_search: false,
+        target_search_network: false,
+        target_content_network: false,
+        target_partner_search_network: false
+    } as any);
+
+    const [defaultValues, setDefaulValues] = React.useState({
+        start_date: props.data?.start_date,
+        end_date: props.data?.end_date
+    })
+
     const campaignStatus: { key: string, value: string }[] = [
         {
             "key": "UNSPECIFIED",
@@ -48,9 +60,14 @@ const CreateCampaign = (props: any) => {
     const {
         register,
         handleSubmit,
+        setValue,
         formState: {errors},
     } = useForm(formOptions);
     const onSubmit = (data: any) => {
+        data['target_google_search'] = setting.target_google_search;
+        data['target_search_network'] = setting.target_search_network;
+        data['target_content_network'] = setting.target_content_network;
+        data['target_partner_search_network'] = setting.target_partner_search_network;
         if (props.isEdit) {
             data['id'] = props.data?.id;
         }
@@ -59,6 +76,18 @@ const CreateCampaign = (props: any) => {
     const handleClose = () => {
         props.onclose();
     };
+
+    const handleChangeValue = (key: string, value: any) => {
+        let obj = JSON.parse(JSON.stringify(defaultValues));
+        obj[key] = value;
+        setDefaulValues(obj);
+    }
+
+    const handleChange = (key: string, value: any) => {
+        let obj = JSON.parse(JSON.stringify(setting));
+        obj[key] = value;
+        setSetting(obj);
+    }
     return (
         <Dialog
             maxWidth="xl"
@@ -132,31 +161,74 @@ const CreateCampaign = (props: any) => {
                                             {...register("amount_micros")}
                                         />
                                     </FormControl>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <FormControl fullWidth>
+                                            <DatePicker
+                                                inputFormat="DD/MM/YYYY"
+                                                label="Start Date"
+                                                value={defaultValues.start_date || null}
+                                                onChange={(newValue) => {
+                                                    handleChangeValue('start_date', newValue);
+                                                    setValue('start_date', newValue);
+                                                }}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
+                                        </FormControl>
+
+                                        <FormControl fullWidth>
+                                            <DatePicker
+                                                inputFormat="DD/MM/YYYY"
+                                                label="End Date"
+                                                value={defaultValues.end_date || null}
+                                                onChange={(newValue) => {
+                                                    handleChangeValue('end_date', newValue);
+                                                    setValue('end_date', newValue);
+                                                }}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
+                                        </FormControl>
+
+
+                                    </LocalizationProvider>
 
                                 </Stack>
 
                                 <Stack direction="row" spacing={2}>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <FormControl fullWidth>
-                                            <DatePicker
-                                                label="Start Date"
-                                                value={props.data?.start_date}
-                                                onChange={(newValue) => {
-                                                }}
-                                                renderInput={(params) => <TextField {...params} />}
-                                            />
-                                        </FormControl>
 
-                                        <FormControl fullWidth>
-                                            <DatePicker
-                                                label="End Date"
-                                                value={props.data?.end_date}
-                                                onChange={(newValue) => {
-                                                }}
-                                                renderInput={(params) => <TextField {...params} />}
-                                            />
-                                        </FormControl>
-                                    </LocalizationProvider>
+                                </Stack>
+                                <Stack direction="row" spacing={2}>
+                                    <FormControlLabel sx={{width: '100%'}}
+                                                      control={<Checkbox
+                                                          checked={props.data?.target_google_search}
+                                                          name="target_google_search"
+                                                          onChange={(newValue) => handleChange("target_google_search", newValue.target.checked)}
+                                                          inputProps={{'aria-label': 'controlled'}}
+                                                      />}
+                                                      label="Target Google Search"/>
+                                    <FormControlLabel sx={{width: '100%'}}
+                                                      control={<Checkbox
+                                                          checked={props.data?.target_search_network}
+                                                          name="target_search_network"
+                                                          onChange={(newValue) => handleChange("target_search_network", newValue.target.checked)}
+                                                          inputProps={{'aria-label': 'controlled'}}
+                                                      />}
+                                                      label="Target Search Network"/>
+                                    <FormControlLabel sx={{width: '100%'}}
+                                                      control={<Checkbox
+                                                          checked={props.data?.target_content_network}
+                                                          name="target_content_network"
+                                                          onChange={(newValue) => handleChange("target_content_network", newValue.target.checked)}
+                                                          inputProps={{'aria-label': 'controlled'}}
+                                                      />}
+                                                      label="Target Content Network"/>
+                                    <FormControlLabel sx={{width: '100%'}}
+                                                      control={<Checkbox
+                                                          checked={props.data?.target_partner_search_network}
+                                                          name="target_partner_search_network"
+                                                          onChange={(newValue) => handleChange("target_partner_search_network", newValue.target.checked)}
+                                                          inputProps={{'aria-label': 'controlled'}}
+                                                      />}
+                                                      label="Target Partner Search Network"/>
                                 </Stack>
                             </FormGroup>
                         </CardContent>
@@ -165,10 +237,10 @@ const CreateCampaign = (props: any) => {
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" onClick={handleClose} color="error">
-                    <CloseIcon/> Đóng
+                    <CloseIcon/> Close
                 </Button>
                 <Button type="submit" variant="contained" autoFocus form="dayLeaveForm">
-                    <SaveIcon/> Lưu
+                    <SaveIcon/> Save
                 </Button>
             </DialogActions>
         </Dialog>

@@ -1,12 +1,13 @@
 import {Card, CardContent, Grid } from '@mui/material';
 import React from 'react';
 import WrapperTableComponent from '../../components/wrapper-table.component';
-import {useQuery} from "react-query";
-import {getCampaign} from "../../ApiService/campaign.api";
+import {useMutation, useQuery} from "react-query";
+import {createCampaign, getCampaign} from "../../ApiService/campaign.api";
 import {campaignColumn} from "./properties/properties";
 import {IColumn} from "../../interfaces/wrapper-table.interface";
 import FilterComponent from "../../components/filter.component";
 import CreateCampaign from "./create";
+import {showSuccessNotification} from "../../notifications/show.success.notification";
 
 const columns: IColumn[] = campaignColumn;
 const Campaigns = () => {
@@ -49,7 +50,7 @@ const Campaigns = () => {
         if (isEdit) {
             // update(data);
         } else {
-            // mutate(data);
+            mutate(data);
         }
     }
 
@@ -61,6 +62,18 @@ const Campaigns = () => {
             setCampaigns(data.data);
         },
     });
+
+    const { mutate } = useMutation("createCampaign", (data: any) => {
+            return createCampaign(data);
+        },
+        {
+            onSuccess: (data) => {
+                refetch();
+                setOpen(false);
+                showSuccessNotification("Create Campaign Success")
+            }
+        }
+    )
     return (
         <>
             <Grid container spacing={3}>
