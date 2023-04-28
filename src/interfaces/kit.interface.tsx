@@ -2,6 +2,7 @@ import { BlobOptions } from "buffer"
 
 export interface IKit{
   id?: number
+  ad_group_id?: number
   image?: string
   is_percentage?: any
   code: string

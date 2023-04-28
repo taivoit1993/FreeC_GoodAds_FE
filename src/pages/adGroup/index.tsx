@@ -2,10 +2,14 @@ import React from 'react';
 import {Card, CardContent, Grid} from "@mui/material";
 import FilterComponent from "../../components/filter.component";
 import WrapperTableComponent from "../../components/wrapper-table.component";
-import {useQuery} from "react-query";
-import {getAdGroups} from "../../ApiService/adGroup.api";
+import {useMutation, useQuery} from "react-query";
+import {createAdGroup, deleteAdGroup, getAdGroups, updateAdGroup, viewAdGroup} from "../../ApiService/adGroup.api";
 import {IColumn} from "../../interfaces/wrapper-table.interface";
 import {addGroupColumn} from "./properties/properties";
+import {showSuccessNotification} from "../../notifications/show.success.notification";
+import CreateAdGroup from "./create";
+import ConfirmDialogComponent from "../../components/confirm.dialog.component";
+import {viewCampaign} from "../../ApiService/campaign.api";
 
 const columns: IColumn[] = addGroupColumn;
 const AdGroup = () => {
@@ -31,11 +35,21 @@ const AdGroup = () => {
     }
 
     const handleView = (id: number) => {
-
+        setIdView(id);
+        setIsEdit(true);
     }
 
     const openConfirmDelete = (id: number) => {
+        setConfirmDelete(true);
+        setIdDelete(id);
+    }
 
+    const onCreate = (data: any) => {
+        if (isEdit) {
+            update(data);
+        } else {
+            mutate(data);
+        }
     }
 
     const openCreateDialog = () => {
@@ -44,13 +58,62 @@ const AdGroup = () => {
         setIsEdit(false);
     }
 
-    const { isLoading, refetch } = useQuery({
+    const handleDelete = () => {
+        setConfirmDelete(false);
+        destroy(idDelete);
+    }
+
+    const {isLoading, refetch} = useQuery({
         queryKey: ["getAdGroups"],
-        queryFn: () => getAdGroups({ params: { } }),
+        queryFn: () => getAdGroups({params: {}}),
         onSuccess: (data) => {
             setAdGroups(data.data);
         },
     });
+
+    //API create ad group
+    const {mutate} = useMutation("createAdGroup", (data: any) => {
+            return createAdGroup(data);
+        },
+        {
+            onSuccess: (data) => {
+                refetch();
+                setOpen(false);
+                showSuccessNotification("Create Ad Group Success!")
+            }
+        }
+    )
+    //API remove ad group
+    const {mutate: destroy} = useMutation("deleteAdGroup", (id: number) => {
+        return deleteAdGroup(id);
+    }, {
+        onSuccess: (data) => {
+            refetch();
+            showSuccessNotification("Delete Ad Group Success!")
+        }
+    })
+
+    //API update ad group
+    const {mutate: update} = useMutation("updateAdGroup", (data: any) => {
+        return updateAdGroup(data.id, data);
+    }, {
+        onSuccess: (data) => {
+            refetch();
+            setOpen(false);
+            showSuccessNotification("Update Campaign Success!")
+        }
+    })
+
+    useQuery({
+        queryKey: ["viewAdGroup", idView],
+        queryFn: () => viewAdGroup(idView),
+        onSuccess: (data) => {
+            setIdView(null);
+            setAdGroup(data.data);
+            setOpen(true);
+        },
+        enabled: !!idView
+    })
     return (
         <>
             <Grid container spacing={3}>
@@ -63,7 +126,7 @@ const AdGroup = () => {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <Card sx={{ m: "1rem", p: "0.5rem" }}>
+                    <Card sx={{m: "1rem", p: "0.5rem"}}>
                         <CardContent>
                             <WrapperTableComponent
                                 columns={columns}
@@ -79,24 +142,24 @@ const AdGroup = () => {
                     </Card>
                 </Grid>
             </Grid>
-            {/*{open && (*/}
-            {/*    <CreateCampaign*/}
-            {/*        open={open}*/}
-            {/*        onclose={() => setOpen(false)}*/}
-            {/*        onCreate={onCreate}*/}
-            {/*        loading={isLoading}*/}
-            {/*        data={campaign}*/}
-            {/*        isEdit={isEdit}*/}
-            {/*    />*/}
-            {/*)}*/}
+            {open && (
+                <CreateAdGroup
+                    open={open}
+                    onclose={() => setOpen(false)}
+                    onCreate={onCreate}
+                    loading={isLoading}
+                    data={adGroup}
+                    isEdit={isEdit}
+                />
+            )}
 
 
-            {/*<ConfirmDialogComponent*/}
-            {/*    open={isConfirmDelete}*/}
-            {/*    title={"Bạn chắc chắn muốn xóa?"}*/}
-            {/*    onClose={() => setConfirmDelete(false)}*/}
-            {/*    onConfirm={handleDelete}*/}
-            {/*/>*/}
+            <ConfirmDialogComponent
+                open={isConfirmDelete}
+                title={"Are you sure remove Ad Group?"}
+                onClose={() => setConfirmDelete(false)}
+                onConfirm={handleDelete}
+            />
         </>
     );
 };

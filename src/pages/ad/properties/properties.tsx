@@ -1,7 +1,7 @@
 import {IColumn} from "../../../interfaces/wrapper-table.interface";
 
 
-export const addGroupColumn: IColumn[] = [
+export const addColumn: IColumn[] = [
     {
         id: "stt",
         label: "#",
@@ -14,20 +14,34 @@ export const addGroupColumn: IColumn[] = [
         minWidth: 150,
     },
     {
-        id: "campaign_id",
-        label: "Campaign Id",
+        id: "ad_group_id",
+        label: "Ad Group Id",
         minWidth: 150,
     },
     {
-        id: "name",
-        label: "Name",
+        id: "head_line_1",
+        label: "Healine 1",
         minWidth: 150,
     },
     {
-        id: "cpc_bid_micros",
-        label: "CPC Bid Micros",
+        id: "head_line_2",
+        label: "HeadLine 2",
         minWidth: 150,
-
+    },
+    {
+        id: "head_line_3",
+        label: "HeadLine 3",
+        minWidth: 150,
+    },
+    {
+        id: "description_1",
+        label: "Description 1",
+        minWidth: 150,
+    },
+    {
+        id: "description_2",
+        label: "Description 2",
+        minWidth: 150,
     },
     {
         id: "status",

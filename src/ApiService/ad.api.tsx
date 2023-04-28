@@ -24,7 +24,7 @@ export const updateAds = async (id: number, data: any) => {
     return responseApi(response)
 }
 
-export const deleteAds = async (id: number) => {
-    const response = await axios.delete(`${AD_URL}/${id}`);
+export const deleteAds = async (id: number, ad_group_id: number) => {
+    const response = await axios.delete(`${AD_URL}/${id}?ad_group_id=${ad_group_id}`);
     return responseApi(response)
 }

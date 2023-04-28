@@ -2,12 +2,13 @@ import {Card, CardContent, Grid } from '@mui/material';
 import React from 'react';
 import WrapperTableComponent from '../../components/wrapper-table.component';
 import {useMutation, useQuery} from "react-query";
-import {createCampaign, getCampaign} from "../../ApiService/campaign.api";
+import {createCampaign, deleteCampaign, getCampaign, updateCampaign, viewCampaign} from "../../ApiService/campaign.api";
 import {campaignColumn} from "./properties/properties";
 import {IColumn} from "../../interfaces/wrapper-table.interface";
 import FilterComponent from "../../components/filter.component";
 import CreateCampaign from "./create";
 import {showSuccessNotification} from "../../notifications/show.success.notification";
+import ConfirmDialogComponent from "../../components/confirm.dialog.component";
 
 const columns: IColumn[] = campaignColumn;
 const Campaigns = () => {
@@ -29,7 +30,8 @@ const Campaigns = () => {
     }
 
     const handleView = (id: number) => {
-
+        setIdView(id);
+        setIsEdit(true);
     }
 
     const handleSearch = (name: string) => {
@@ -43,12 +45,19 @@ const Campaigns = () => {
     }
 
     const openConfirmDelete = (id: number) => {
-
+        setConfirmDelete(true);
+        setIdDelete(id);
     }
+
+    const handleDelete = () => {
+        setConfirmDelete(false);
+        destroy(idDelete);
+    }
+
 
     const onCreate = (data: any) => {
         if (isEdit) {
-            // update(data);
+            update(data);
         } else {
             mutate(data);
         }
@@ -62,7 +71,7 @@ const Campaigns = () => {
             setCampaigns(data.data);
         },
     });
-
+    //API create campaign
     const { mutate } = useMutation("createCampaign", (data: any) => {
             return createCampaign(data);
         },
@@ -74,6 +83,38 @@ const Campaigns = () => {
             }
         }
     )
+    //API remove campaign
+    const { mutate: destroy } = useMutation("deleteCampaign", (id: number) => {
+        return deleteCampaign(id);
+    }, {
+        onSuccess: (data) => {
+            refetch();
+            showSuccessNotification("Delete Campaign Success!")
+        }
+    })
+
+    //API get details campaign
+    useQuery({
+        queryKey: ["getCampaign", idView],
+        queryFn: () => viewCampaign(idView),
+        onSuccess: (data) => {
+            setIdView(null);
+            setCampaign(data.data);
+            setOpen(true);
+        },
+        enabled: !!idView
+    })
+
+    //API update campaign
+    const { mutate: update } = useMutation("updateCampaign", (data: any) => {
+        return updateCampaign(data.id, data);
+    }, {
+        onSuccess: (data) => {
+            refetch();
+            setOpen(false);
+            showSuccessNotification("Update Campaign Success!")
+        }
+    })
     return (
         <>
             <Grid container spacing={3}>
@@ -113,13 +154,12 @@ const Campaigns = () => {
                 />
             )}
 
-
-            {/*<ConfirmDialogComponent*/}
-            {/*    open={isConfirmDelete}*/}
-            {/*    title={"Bạn chắc chắn muốn xóa?"}*/}
-            {/*    onClose={() => setConfirmDelete(false)}*/}
-            {/*    onConfirm={handleDelete}*/}
-            {/*/>*/}
+            <ConfirmDialogComponent
+                open={isConfirmDelete}
+                title={"Are you sure remove capaign?"}
+                onClose={() => setConfirmDelete(false)}
+                onConfirm={handleDelete}
+            />
         </>
     );
 };

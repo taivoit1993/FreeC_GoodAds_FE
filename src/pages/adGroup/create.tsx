@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
     Button, Card, CardContent, CardHeader, Checkbox,
     Dialog,
@@ -12,29 +12,21 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SaveIcon from "@mui/icons-material/Save";
-import {CreateCampaignValidation} from "./validate/validation";
+
 import {yupResolver} from "@hookform/resolvers/yup";
 import {useForm} from "react-hook-form";
-import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
+import {useQuery} from "react-query";
+import {getCampaign} from "../../ApiService/campaign.api";
+import {CreateAdGroupValidation} from "./validate/validation";
 
-const CreateCampaign = (props: any) => {
-
+const CreateAdGroup = (props: any) => {
+    const [campaigns, setCampaigns] = React.useState([]);
     const [defaultValues, setDefaulValues] = React.useState({
         start_date: props.data?.start_date,
         end_date: props.data?.end_date
     })
 
-    const campaignStatus: { key: number, value: string }[] = [
-        // {
-        //     "key": 0,
-        //     "value": "UNSPECIFIED"
-        // },
-        // {
-        //     "key": 1,
-        //     "value": "UNKNOWN"
-        // },
+    const adGroupStatus: { key: number, value: string }[] = [
         {
             "key": 2,
             "value": "ENABLED"
@@ -42,14 +34,10 @@ const CreateCampaign = (props: any) => {
         {
             "key": 3,
             "value": "PAUSED"
-        },
-        // {
-        //     "key": 4,
-        //     "value": "REMOVED"
-        // }
+        }
     ]
     const formOptions = {
-        resolver: yupResolver(CreateCampaignValidation),
+        resolver: yupResolver(CreateAdGroupValidation),
     };
     // get functions to build form with useForm() hook
     const {
@@ -59,6 +47,7 @@ const CreateCampaign = (props: any) => {
         formState: {errors},
     } = useForm(formOptions);
     const onSubmit = (data: any) => {
+        console.log(data);
         if (props.isEdit) {
             data['id'] = props.data?.id;
         }
@@ -68,11 +57,13 @@ const CreateCampaign = (props: any) => {
         props.onclose();
     };
 
-    const handleChangeValue = (key: string, value: any) => {
-        let obj = JSON.parse(JSON.stringify(defaultValues));
-        obj[key] = value;
-        setDefaulValues(obj);
-    }
+    const {isLoading, refetch} = useQuery({
+        queryKey: ["getCampaign"],
+        queryFn: () => getCampaign({params: {}}),
+        onSuccess: (data) => {
+            setCampaigns(data.data);
+        },
+    });
 
     return (
         <Dialog
@@ -82,7 +73,7 @@ const CreateCampaign = (props: any) => {
             onClose={handleClose}
         >
             <DialogTitle id="responsive-dialog-title">
-                {props.isEdit ? "Edit Campaign" : "Add Campaign"}
+                {props.isEdit ? "Edit Ad Group" : "Add Add Group"}
             </DialogTitle>
             <DialogContent>
                 <form method="post" id="dayLeaveForm" onSubmit={handleSubmit(onSubmit)}>
@@ -106,19 +97,19 @@ const CreateCampaign = (props: any) => {
                                         />
                                     </FormControl>
                                     <FormControl fullWidth>
-                                        <InputLabel id="select-status-campaign">
+                                        <InputLabel id="select-ad-group-status">
                                             Status
                                         </InputLabel>
                                         <Select
-                                            labelId="select-status-campaign"
-                                            id="select-status-campaign"
+                                            labelId="select-ad-group-status"
+                                            id="select-ad-group-status"
                                             defaultValue={props.data?.status}
                                             sx={{marginBottom: 2}}
                                             label="status"
                                             {...register("status", {required: true})}
                                             error={!!errors["status"]}
                                         >
-                                            {campaignStatus.map((item: any, index: number) => (
+                                            {adGroupStatus.map((item: any, index: number) => (
                                                 <MenuItem key={index} value={item.key}>
                                                     {item.value}
                                                 </MenuItem>
@@ -132,62 +123,53 @@ const CreateCampaign = (props: any) => {
                                             ""
                                         )}
                                     </FormControl>
-                                    <FormControl fullWidth>
-                                        <TextField
-                                            id="amount_micros"
-                                            sx={{paddingBottom: 2}}
-                                            type="number"
-                                            variant="outlined"
-                                            label="Amount Micros"
-                                            defaultValue={props.data?.amount_micros}
-                                            error={!!errors["amount_micros"]}
-                                            helperText={String(
-                                                errors["amount_micros"] ? errors["amount_micros"].message : ""
-                                            )}
-                                            InputProps={{
-                                                readOnly: props.isEdit ? true : false,
-                                            }}
-                                            {...register("amount_micros")}
-                                        />
-                                    </FormControl>
-
-
                                 </Stack>
 
                                 <Stack direction="row" spacing={2}>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <FormControl fullWidth>
-                                            <DatePicker
-                                                inputFormat="DD/MM/YYYY"
-                                                label="Start Date"
-                                                value={defaultValues.start_date || null}
-                                                onChange={(newValue) => {
-                                                    handleChangeValue('start_date', newValue);
-                                                    setValue('start_date', newValue);
-                                                }}
+                                    <FormControl fullWidth>
+                                        <InputLabel id="select-campaign-id">
+                                            Campaign
+                                        </InputLabel>
+                                        <Select
+                                            labelId="select-campaign-id"
+                                            id="select-campaign-id"
+                                            defaultValue={props.data?.campaign_id}
 
-                                                disabled={props.isEdit ? true : false}
-                                                renderInput={(params) => <TextField {...params} />}
-                                            />
-                                        </FormControl>
+                                            sx={{marginBottom: 2}}
+                                            label="Campaign"
+                                            {...register("campaign_id", {required: true})}
+                                            error={!!errors["campaign_id"]}
+                                        >
+                                            {campaigns.map((item: any, index: number) => (
+                                                <MenuItem key={item.id} value={item.id}>
+                                                    {item.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                        {errors["campaign_id"] ? (
+                                            <FormHelperText error={true}>
+                                                {String(errors["campaign_id"] ? errors["campaign_id"].message : "")}
+                                            </FormHelperText>
+                                        ) : (
+                                            ""
+                                        )}
+                                    </FormControl>
+                                    <FormControl fullWidth>
+                                        <TextField
+                                            id="cpc_bid_micros"
+                                            sx={{paddingBottom: 2}}
+                                            type="number"
+                                            variant="outlined"
+                                            label="CPC Bid Micros"
+                                            defaultValue={props.data?.cpc_bid_micros}
+                                            error={!!errors["cpc_bid_micros"]}
+                                            helperText={String(
+                                                errors["cpc_bid_micros"] ? errors["cpc_bid_micros"].message : ""
+                                            )}
+                                            {...register("cpc_bid_micros")}
+                                        />
+                                    </FormControl>
 
-                                        <FormControl fullWidth>
-                                            <DatePicker
-                                                inputFormat="DD/MM/YYYY"
-                                                label="End Date"
-                                                value={defaultValues.end_date || null}
-                                                onChange={(newValue) => {
-                                                    handleChangeValue('end_date', newValue);
-                                                    setValue('end_date', newValue);
-                                                }}
-                                                disabled={props.isEdit ? true : false}
-                                                minDate={dayjs(defaultValues.start_date)?.add(1, "day")}
-                                                renderInput={(params) => <TextField {...params} />}
-                                            />
-                                        </FormControl>
-
-
-                                    </LocalizationProvider>
                                 </Stack>
                             </FormGroup>
                         </CardContent>
@@ -206,4 +188,4 @@ const CreateCampaign = (props: any) => {
     );
 };
 
-export default CreateCampaign;
+export default CreateAdGroup;

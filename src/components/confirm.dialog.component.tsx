@@ -19,10 +19,10 @@ const ConfirmDialogComponent: FC<IConfirmDialog> = (props) => {
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" onClick={props.onClose} color="error" autoFocus>
-                    <CloseIcon/> Đóng
+                    <CloseIcon/> Close
                 </Button>
                 <Button onClick={props.onConfirm} variant="contained">
-                    <SaveIcon/> Đồng ý
+                    <SaveIcon/> OK
                 </Button>
             </DialogActions>
         </Dialog>
