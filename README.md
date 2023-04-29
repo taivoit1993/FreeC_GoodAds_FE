@@ -1,3 +1,11 @@
+
+# Setup FE
+1. **npm install**
+2. **npm start**
+
+Please use node v16 and port 3000 to avoid issue. If get error when **npm install**, please use **npm install --force**
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
