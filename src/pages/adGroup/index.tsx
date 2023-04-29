@@ -122,7 +122,6 @@ const AdGroup = () => {
                         seachTiltle={"Search Name"}
                         onSearch={handleSearch}
                         onCreate={openCreateDialog}
-
                     />
                 </Grid>
                 <Grid item xs={12}>

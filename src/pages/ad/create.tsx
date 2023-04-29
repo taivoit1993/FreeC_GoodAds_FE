@@ -191,7 +191,7 @@ const CreateAd = (props: any) => {
                                             labelId="select-ad-group-id"
                                             id="sselect-ad-group-id"
                                             defaultValue={props.data?.ad_group_id}
-                                            disabled={true}
+                                            disabled={props.isEdit ? true : false}
                                             sx={{marginBottom: 2}}
                                             label="Ad Group"
                                             {...register("ad_group_id", {required: true})}

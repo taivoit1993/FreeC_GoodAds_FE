@@ -27,13 +27,13 @@ export const logout = async () => {
 }
 
 export const getGoogleUrl = async (queryParams: String) => {
-    if(queryParams.length === 0){
+
         const response = await axios.get(`${AUTH_URL}auth/google/url`);
         if (response?.status === 200) {
             return response.data;
         }
         throw new Error("Error");
-    }
+
 }
 
 export const callbackGoogleUrl = async (queryParams: String) => {

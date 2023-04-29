@@ -38,31 +38,31 @@ const FilterComponent: FC<IFilter> = (props) => {
                 <Box sx={{flexGrow: 1}}>
                     <Grid container>
                         <Grid item xs={6}>
-                            <Stack direction="row" spacing={2}>
-                                <TextField
-                                    name="search"
-                                    onChange={handChangeKey}
-                                    sx={{width: "80%"}}
-                                    size="small"
-                                    label={props.seachTiltle}
-                                    onKeyDown={(e) => handleEnterEvent(e)}
-                                />
-                                {props.isSearchDate && (
-                                    <LocalizationProvider adapterLocale={frCA} dateAdapter={AdapterDayjs}
-                                                          utils={MomentUtils}>
-                                        <DatePicker
-                                            label="Chọn thời gian"
-                                            views={['month', 'year']}
-                                            inputFormat="MM-YYYY"
-                                            value={startDate}
-                                            onChange={(newValue: any) => handleChangeDate(newValue)}
-                                            renderInput={(params: any) => (
-                                                <TextField size="small" {...params} />
-                                            )}
-                                        />
-                                    </LocalizationProvider>
-                                )}
-                            </Stack>
+                            {/*<Stack direction="row" spacing={2}>*/}
+                            {/*    <TextField*/}
+                            {/*        name="search"*/}
+                            {/*        onChange={handChangeKey}*/}
+                            {/*        sx={{width: "80%"}}*/}
+                            {/*        size="small"*/}
+                            {/*        label={props.seachTiltle}*/}
+                            {/*        onKeyDown={(e) => handleEnterEvent(e)}*/}
+                            {/*    />*/}
+                            {/*    {props.isSearchDate && (*/}
+                            {/*        <LocalizationProvider adapterLocale={frCA} dateAdapter={AdapterDayjs}*/}
+                            {/*                              utils={MomentUtils}>*/}
+                            {/*            <DatePicker*/}
+                            {/*                label="Chọn thời gian"*/}
+                            {/*                views={['month', 'year']}*/}
+                            {/*                inputFormat="MM-YYYY"*/}
+                            {/*                value={startDate}*/}
+                            {/*                onChange={(newValue: any) => handleChangeDate(newValue)}*/}
+                            {/*                renderInput={(params: any) => (*/}
+                            {/*                    <TextField size="small" {...params} />*/}
+                            {/*                )}*/}
+                            {/*            />*/}
+                            {/*        </LocalizationProvider>*/}
+                            {/*    )}*/}
+                            {/*</Stack>*/}
                         </Grid>
                         <Grid item xs={6}>
                             <Stack
@@ -71,26 +71,6 @@ const FilterComponent: FC<IFilter> = (props) => {
                                 alignItems="center"
                                 spacing={2}
                             >
-                                {props.onImport && (
-                                    <Button
-                                        sx={{fontWeight: "600"}}
-                                        variant="contained"
-                                        onClick={props?.onImport}
-                                    >
-                                        <AttachFileIcon/>
-                                        Tải lên
-                                    </Button>
-                                )}
-                                {props.onExport && (
-                                    <Button
-                                        sx={{fontWeight: "600"}}
-                                        variant="contained"
-                                        onClick={props?.onExport}
-                                    >
-                                        <FileDownloadIcon/>
-                                        Xuất Excel
-                                    </Button>
-                                )}
                                 {props.onCreate && (
                                     <Button
                                         sx={{fontWeight: "600"}}
@@ -101,16 +81,16 @@ const FilterComponent: FC<IFilter> = (props) => {
                                         Add
                                     </Button>
                                 )}
-                                {props.onSearch && (
-                                    <Button
-                                        sx={{fontWeight: "600"}}
-                                        variant="contained"
-                                        onClick={handleSearch}
-                                    >
-                                        <SearchIcon/>
-                                        Search
-                                    </Button>
-                                )}
+                                {/*{props.onSearch && (*/}
+                                {/*    <Button*/}
+                                {/*        sx={{fontWeight: "600"}}*/}
+                                {/*        variant="contained"*/}
+                                {/*        onClick={handleSearch}*/}
+                                {/*    >*/}
+                                {/*        <SearchIcon/>*/}
+                                {/*        Search*/}
+                                {/*    </Button>*/}
+                                {/*)}*/}
                             </Stack>
                         </Grid>
                     </Grid>

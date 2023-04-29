@@ -33,7 +33,11 @@ const LoginComponent = () => {
         queryKey: ["callbackGoogleUrl"],
         queryFn: () => callbackGoogleUrl(location.search),
         onSuccess: (data) => {
-            console.log(data);
+            if(data){
+                navigate('/campaigns');
+            }else{
+                navigate('/login');
+            }
         },
     });
 
@@ -103,7 +107,7 @@ const LoginComponent = () => {
                     {/*</Button>*/}
                     {/*<GoogleLogin onSuccess={responseMessage}/>*/}
                     <Button type="submit" color="primary" variant="contained" sx={{fontWeight: 600}}>
-                        ĐĂNG NHẬP
+                        Login Google
                     </Button>
                 </form>
             </div>
