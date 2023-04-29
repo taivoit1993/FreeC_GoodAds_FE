@@ -44,7 +44,7 @@ export interface IWrapperTable {
     onView?: (index: number) => void
     onDetails?: (index: number) => void
     onEdit?: (index: number) => void
-    onDelete?: (index: number) => void
+    onDelete?: (index: number, optional?: number) => void
     onChangeStatus?: (index: number, status: string) => void
     onUploadImage?: (row: IKit) => void
     onAttendance?: (index: number) => void

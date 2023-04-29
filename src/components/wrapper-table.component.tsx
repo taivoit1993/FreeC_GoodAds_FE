@@ -65,7 +65,7 @@ const WrapperTableComponent: FC<IWrapperTable> = (props) => {
     }
 
     const handleDelete = (row: IKit) => {
-        props.onDelete?.(row.id || 0);
+        props.onDelete?.(row.id || 0, row.ad_group_id || 0);
     }
     const handleBenefit = (row: any) => {
         props.onBenefit?.(row);
@@ -142,7 +142,7 @@ const WrapperTableComponent: FC<IWrapperTable> = (props) => {
                                                             <Button
                                                                 onClick={(e) => handleChangeStatus(row)}
                                                                 sx={{minWidth: "auto"}}
-                                                                disabled={row["status"] === "INIT" ? false : true}
+                                                                disabled={row["status"] === "REMOVED" ? true : false}
                                                             >
                                                                 <CheckIcon color="success"/>
                                                             </Button>
@@ -168,7 +168,8 @@ const WrapperTableComponent: FC<IWrapperTable> = (props) => {
                                                             <Tooltip title="Xuất bảng lương">
                                                                 <Button
                                                                     onClick={(e) => handleExport(row)}
-                                                                    sx={{minWidth: "auto"}}>
+                                                                    sx={{minWidth: "auto"}}
+                                                                    disabled={row["status"] === "INIT" ? false : true}>
                                                                     <DownloadIcon/>
                                                                 </Button>
                                                             </Tooltip>
@@ -178,7 +179,8 @@ const WrapperTableComponent: FC<IWrapperTable> = (props) => {
                                                                 <Tooltip title="Xóa">
                                                                     <Button
                                                                         onClick={(e) => handleDelete(row)}
-                                                                        sx={{minWidth: "auto"}}>
+                                                                        sx={{minWidth: "auto"}}
+                                                                        disabled={row["status"] === "REMOVED" ? true : false}>
                                                                         <DeleteIcon color="error"/>
                                                                     </Button>
                                                                 </Tooltip>

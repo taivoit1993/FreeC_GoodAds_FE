@@ -7,9 +7,9 @@ export function setupAxios(axios: any) {
     // Add a request interceptor
     axios.interceptors.request.use(
         (config: any) => {
-            const users = getRecoil(authAtom);
-            if (users?.access_token) {
-                config.headers['Authorization'] = 'Bearer ' + users.access_token
+            const goolgeAccount = getRecoil(authAtom);
+            if (goolgeAccount?.refreshToken) {
+                config.headers['google-token'] = goolgeAccount?.refreshToken
             }
             setRecoil(loadingAtom, true);
             return config
@@ -25,16 +25,20 @@ export function setupAxios(axios: any) {
         }, (error: any) => {
             setRecoil(loadingAtom, false);
             let errorMessage: any = "";
+
             if (error.response.status === 500) {
                 errorMessage = "Có lỗi xảy ra vui lòng liên hệ quản trị viên!";
             }
             if (error.res?.status === 404) {
                 errorMessage = "Không tìm thấy API! Vui lòng liện hệ quản trị viên!";
             }
-
-            if(error.response?.data?.errors){
+            if (error.response.status === 401) {
+                window.location = '/login' as unknown as Location;
+                localStorage.clear();
+            }
+            if (error.response?.data?.errors) {
                 errorMessage = Object.values(error.response?.data?.errors)[0];
-            }else{
+            } else {
                 if (error.response?.data?.message) {
                     errorMessage = error.response?.data?.message;
                 } else {
@@ -42,17 +46,12 @@ export function setupAxios(axios: any) {
                 }
             }
 
-
-
             setRecoil(alertAtom, {
                 open: true,
                 type: 'error' as AlertColor,
                 title: errorMessage
             })
-            if (error.response.status === 401) {
-                window.location = '/login' as unknown as Location;
-                localStorage.clear();
-            }
+
             return error;
         }
     )

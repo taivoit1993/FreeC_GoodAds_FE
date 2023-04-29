@@ -13,14 +13,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {SideBar} from './properties';
-import {Outlet} from 'react-router-dom';
+import {Outlet, useNavigate} from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {Grid, Menu, MenuItem} from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItemCustom from './MenuItem';
-import logo from './../../../assets/images/logodinhgia2.jpg'
+import logo from './../../../assets/images/logo-freec-1.png'
 
-const drawerWidth = 260;
+const drawerWidth = 220;
 
 const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})<{
     open?: boolean;
@@ -72,6 +72,7 @@ const DrawerHeader = styled('div')(({theme}) => ({
 }));
 
 export default function Header() {
+    let navigate = useNavigate();
     const sideBar = SideBar;
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
@@ -95,6 +96,7 @@ export default function Header() {
 
     const handleLogout = () => {
         setAnchorEl(null);
+        navigate('/login');
     }
 
     return (
@@ -115,7 +117,7 @@ export default function Header() {
                         <Grid container spacing={2} direction="row"
                               justifyContent="center">
                             <Grid item xs={10}>
-                                <Typography variant="h4" component="h2">Demo Application Intergrate Google Ads API</Typography>
+                                {/*<Typography variant="h4" component="h2">Demo Application Intergrate Google Ads API</Typography>*/}
                             </Grid>
                             <Grid item xs={2}>
                                 <div style={{justifyContent: 'flex-end', display: 'flex'}}>
@@ -170,7 +172,7 @@ export default function Header() {
                 open={open}
             >
                 <DrawerHeader>
-                    {/*<img src={logo} style={{width: '100%', paddingLeft: '2rem'}}/>*/}
+                    <img src={logo} style={{width: 150, paddingLeft: '2rem'}}/>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon sx={{color: "white"}}/> :
                             <ChevronRightIcon sx={{color: "white"}}/>}
